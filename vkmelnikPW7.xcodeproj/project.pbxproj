@@ -13,6 +13,10 @@
 		126C1AE22799831400AC7E84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 126C1AE12799831400AC7E84 /* Assets.xcassets */; };
 		126C1AE52799831400AC7E84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 126C1AE32799831400AC7E84 /* LaunchScreen.storyboard */; };
 		126C1AEF279989F400AC7E84 /* UIView_Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AEE279989F400AC7E84 /* UIView_Pin.swift */; };
+		126C1AF227998D1300AC7E84 /* MapActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF127998D1300AC7E84 /* MapActionButton.swift */; };
+		126C1AF427998EC300AC7E84 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF327998EC300AC7E84 /* UIColorExtension.swift */; };
+		126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF52799932D00AC7E84 /* MapTextField.swift */; };
+		126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		126C1AE42799831400AC7E84 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		126C1AE62799831400AC7E84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		126C1AEE279989F400AC7E84 /* UIView_Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView_Pin.swift; sourceTree = "<group>"; };
+		126C1AF127998D1300AC7E84 /* MapActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapActionButton.swift; sourceTree = "<group>"; };
+		126C1AF327998EC300AC7E84 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		126C1AF52799932D00AC7E84 /* MapTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTextField.swift; sourceTree = "<group>"; };
+		126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +64,7 @@
 		126C1AD72799831100AC7E84 /* vkmelnikPW7 */ = {
 			isa = PBXGroup;
 			children = (
+				126C1AF027998CDD00AC7E84 /* Views */,
 				126C1AED2799869B00AC7E84 /* Models */,
 				126C1AEC2799868E00AC7E84 /* Controllers */,
 				126C1AD82799831200AC7E84 /* AppDelegate.swift */,
@@ -72,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				126C1ADC2799831200AC7E84 /* MapViewController.swift */,
+				126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -81,6 +91,16 @@
 			children = (
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		126C1AF027998CDD00AC7E84 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				126C1AF127998D1300AC7E84 /* MapActionButton.swift */,
+				126C1AF327998EC300AC7E84 /* UIColorExtension.swift */,
+				126C1AF52799932D00AC7E84 /* MapTextField.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +176,10 @@
 				126C1AD92799831200AC7E84 /* AppDelegate.swift in Sources */,
 				126C1AEF279989F400AC7E84 /* UIView_Pin.swift in Sources */,
 				126C1ADB2799831200AC7E84 /* SceneDelegate.swift in Sources */,
+				126C1AF227998D1300AC7E84 /* MapActionButton.swift in Sources */,
+				126C1AF427998EC300AC7E84 /* UIColorExtension.swift in Sources */,
+				126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */,
+				126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
