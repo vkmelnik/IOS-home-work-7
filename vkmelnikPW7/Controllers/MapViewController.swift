@@ -15,6 +15,7 @@ class MapViewController: UIViewController {
     private var clearButton: UIButton!
     private var startLocation: UITextField!
     private var endLocation: UITextField!
+    public let locationManager = CLLocationManager()
     
     private let mapView: MKMapView = {
         let mapView = MKMapView()
@@ -32,6 +33,7 @@ class MapViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        locationManager.requestWhenInUseAuthorization()
         configureUI()
     }
 

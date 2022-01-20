@@ -51,6 +51,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>App wants to know your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App wants to know your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App wants to know your location</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
