@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MapViewControllerProtocol {
     
     private var goButton: UIButton!
     private var clearButton: UIButton!
@@ -52,6 +52,11 @@ class MapViewController: UIViewController {
     private func configureButtons() {
         let goButton = MapActionButton(backgroundColor: .blue, text: "Go")
         let clearButton = MapActionButton(backgroundColor: .lightGray, text: "Clear")
+        clearButton.addTarget(self, action: #selector(clearButtonWasPressed), for: .touchUpInside)
+        goButton.addTarget(self, action: #selector(goButtonWasPressed), for: .touchUpInside)
+        goButton.isEnabled = false
+        clearButton.isEnabled = false
+        
         let buttonStack = UIStackView()
         buttonStack.axis = .horizontal
         view.addSubview(buttonStack)
@@ -84,6 +89,38 @@ class MapViewController: UIViewController {
         endLocation.delegate = self
         self.startLocation = startLocation
         self.endLocation = endLocation
+    }
+    
+    @objc func clearButtonWasPressed() {
+        startLocation.text = ""
+        endLocation.text = ""
+        goButton.isEnabled = false
+        clearButton.isEnabled = false
+    }
+    
+    @objc func goButtonWasPressed() {
+        print("Go")
+    }
+    
+    public func canGo() -> Bool {
+        return startLocation.text != ""
+            && endLocation.text != "";
+    }
+    
+    public func tryGo(_ textField: UITextField) {
+        if (canGo() && textField == endLocation) {
+            goButtonWasPressed();
+        }
+    }
+    
+    public func enableButtons() {
+        goButton.isEnabled = true
+        clearButton.isEnabled = true
+    }
+    
+    public func disableButtons() {
+        goButton.isEnabled = false
+        clearButton.isEnabled = false
     }
 }
 

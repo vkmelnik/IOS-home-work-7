@@ -23,6 +23,7 @@ class MapActionButton: UIButton {
     convenience init(backgroundColor: UIColor, text: String) {
         self.init()
         super.backgroundColor = backgroundColor
+        super.setTitleColor(.gray, for: .disabled)
         super.setTitle(text, for: .normal)
         super.layer.cornerRadius = 10
         super.layer.masksToBounds = true

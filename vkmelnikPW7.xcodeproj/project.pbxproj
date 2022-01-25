@@ -17,6 +17,7 @@
 		126C1AF427998EC300AC7E84 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF327998EC300AC7E84 /* UIColorExtension.swift */; };
 		126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF52799932D00AC7E84 /* MapTextField.swift */; };
 		126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */; };
+		128DCBA527A02423004D20F9 /* MapViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		126C1AF327998EC300AC7E84 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		126C1AF52799932D00AC7E84 /* MapTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTextField.swift; sourceTree = "<group>"; };
 		126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewExtension.swift; sourceTree = "<group>"; };
+		128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 			children = (
 				126C1ADC2799831200AC7E84 /* MapViewController.swift */,
 				126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */,
+				128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 				126C1AF427998EC300AC7E84 /* UIColorExtension.swift in Sources */,
 				126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */,
 				126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */,
+				128DCBA527A02423004D20F9 /* MapViewControllerProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
