@@ -5,6 +5,7 @@
 //  Created by Vsevolod Melnik on 20.01.2022.
 //
 
+import MapKit
 import UIKit
 
 extension MapViewController: UITextFieldDelegate {
@@ -28,5 +29,17 @@ extension MapViewController: UITextFieldDelegate {
         if !(touches.first?.view is UITextField) {
             view.endEditing(true)
         }
+    }
+    
+}
+
+extension MapViewController: MKMapViewDelegate {
+    
+    // Draw route.
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
+        renderer.strokeColor = .blue
+        renderer.lineWidth = 5
+        return renderer
     }
 }

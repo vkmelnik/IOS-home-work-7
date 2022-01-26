@@ -17,6 +17,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private var endLocation: UITextField!
     public let locationManager = CLLocationManager()
     
+    var coordinates: [CLLocationCoordinate2D] = []
+    var annotations = [MKAnnotation]()
+    var overlays = [MKOverlay]()
+    
     private let mapView: MKMapView = {
         let mapView = MKMapView()
         mapView.layer.masksToBounds = true
@@ -47,6 +51,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private func configureMapView() {
         view.addSubview(mapView)
         mapView.pin(to: view)
+        mapView.delegate = self
     }
     
     private func configureButtons() {
@@ -99,7 +104,70 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     }
     
     @objc func goButtonWasPressed() {
-        print("Go")
+        guard
+            let first = startLocation.text,
+            let second = endLocation.text,
+            first != second
+        else {
+            return
+        }
+        let group = DispatchGroup()
+        group.enter()
+        getCoordinateFrom(address: first, completion: {
+            [weak self] coords,_ in
+                if let coords = coords {
+                    self?.coordinates.append(coords)
+                }
+            group.leave()
+        })
+        group.enter()
+        getCoordinateFrom(address: second, completion: {
+            [weak self] coords,_ in
+                if let coords = coords {
+                    self?.coordinates.append(coords)
+                }
+            group.leave()
+        })
+        
+        group.notify(queue: .main) {
+            DispatchQueue.main.async { [weak self] in
+                self?.buildPath()
+            }
+        }
+    }
+    
+    private func buildPath() {
+        if self.coordinates.count < 2 {
+            return
+        }
+        let markLocationOne = MKPlacemark(coordinate: self.coordinates.first!)
+        let markLocationTwo = MKPlacemark(coordinate: self.coordinates.last!)
+        let directionRequest = MKDirections.Request()
+        directionRequest.source = MKMapItem(placemark: markLocationOne)
+        directionRequest.destination = MKMapItem(placemark: markLocationTwo)
+        directionRequest.transportType = .automobile
+                
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate { (response, error) in
+            if error != nil {
+                print(String(describing: error))
+            } else {
+                let myRoute: MKRoute? = response?.routes.first
+                if let a = myRoute?.polyline {
+                    if self.overlays.count > 0 {
+                        self.mapView.removeOverlays(self.overlays)
+                        self.overlays = []
+                    }
+                    self.overlays.append(a)
+                    self.mapView.addOverlay(a)
+                    self.mapView.centerCoordinate = self.coordinates.last!
+                    
+                    let span = MKCoordinateSpan(latitudeDelta: 0.9, longitudeDelta: 0.9)
+                    let region = MKCoordinateRegion(center: self.coordinates.last!, span: span)
+                    self.mapView.setRegion(region, animated: true)
+                }
+            }
+        }
     }
     
     public func canGo() -> Bool {
@@ -121,6 +189,16 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     public func disableButtons() {
         goButton.isEnabled = false
         clearButton.isEnabled = false
+    }
+    
+    private func getCoordinateFrom(address: String,
+                                   completion:
+                                    @escaping(_ coordinate: CLLocationCoordinate2D?,
+                                              _ error: Error?) -> () ) {
+        DispatchQueue.global(qos: .background).async {
+            CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1)
+            }
+        }
     }
 }
 
