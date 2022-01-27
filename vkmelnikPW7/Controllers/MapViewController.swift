@@ -7,7 +7,7 @@
 
 import UIKit
 import CoreLocation
-import MapKit
+import YandexMapsMobile
 
 class MapViewController: UIViewController, MapViewControllerProtocol {
     
@@ -18,19 +18,15 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     public let locationManager = CLLocationManager()
     
     var coordinates: [CLLocationCoordinate2D] = []
-    var annotations = [MKAnnotation]()
-    var overlays = [MKOverlay]()
+    var drivingSession: YMKDrivingSession?
     
-    private let mapView: MKMapView = {
-        let mapView = MKMapView()
+    
+    private let mapView: YMKMapView = {
+        let mapView = YMKMapView()
         mapView.layer.masksToBounds = true
         mapView.layer.cornerRadius = 10
         mapView.translatesAutoresizingMaskIntoConstraints = false
-        mapView.showsCompass = true
-        mapView.showsScale = true
-        mapView.showsTraffic = true
-        mapView.showsBuildings = true
-        mapView.showsUserLocation = true
+        // TODO: add other settings.
         return mapView
     }()
 
@@ -39,6 +35,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         // Do any additional setup after loading the view.
         locationManager.requestWhenInUseAuthorization()
         configureUI()
+        mapView.mapWindow.map.move(
+                with: YMKCameraPosition.init(target: YMKPoint(latitude: 55.751574, longitude: 37.573856), zoom: 15, azimuth: 0, tilt: 0),
+                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
+                cameraCallback: nil)
     }
 
     private func configureUI() {
@@ -51,7 +51,6 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private func configureMapView() {
         view.addSubview(mapView)
         mapView.pin(to: view)
-        mapView.delegate = self
     }
     
     private func configureButtons() {
@@ -111,6 +110,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         else {
             return
         }
+        self.coordinates = []
         let group = DispatchGroup()
         group.enter()
         getCoordinateFrom(address: first, completion: {
@@ -140,34 +140,34 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         if self.coordinates.count < 2 {
             return
         }
-        let markLocationOne = MKPlacemark(coordinate: self.coordinates.first!)
-        let markLocationTwo = MKPlacemark(coordinate: self.coordinates.last!)
-        let directionRequest = MKDirections.Request()
-        directionRequest.source = MKMapItem(placemark: markLocationOne)
-        directionRequest.destination = MKMapItem(placemark: markLocationTwo)
-        directionRequest.transportType = .automobile
+        let requestPoints : [YMKRequestPoint] = [
+            YMKRequestPoint(point: YMKPoint(latitude: coordinates.first!.latitude,
+                                            longitude: coordinates.first!.longitude),
+                                                type: .waypoint, pointContext: nil),
+            YMKRequestPoint(point: YMKPoint(latitude: coordinates.last!.latitude,
+                                            longitude: coordinates.last!.longitude),
+                                                type: .waypoint, pointContext: nil)
+        ]
                 
-        let directions = MKDirections(request: directionRequest)
-        directions.calculate { (response, error) in
-            if error != nil {
-                print(String(describing: error))
+        let responseHandler = {(routesResponse: [YMKDrivingRoute]?, error: Error?) -> Void in
+            if let routes = routesResponse {
+                self.onRoutesReceived(routes)
             } else {
-                let myRoute: MKRoute? = response?.routes.first
-                if let a = myRoute?.polyline {
-                    if self.overlays.count > 0 {
-                        self.mapView.removeOverlays(self.overlays)
-                        self.overlays = []
-                    }
-                    self.overlays.append(a)
-                    self.mapView.addOverlay(a)
-                    self.mapView.centerCoordinate = self.coordinates.last!
-                    
-                    let span = MKCoordinateSpan(latitudeDelta: 0.9, longitudeDelta: 0.9)
-                    let region = MKCoordinateRegion(center: self.coordinates.last!, span: span)
-                    self.mapView.setRegion(region, animated: true)
-                }
+                self.onRoutesError(error!)
             }
         }
+            
+        let drivingRouter = YMKDirections.sharedInstance().createDrivingRouter()
+        drivingSession = drivingRouter.requestRoutes(
+            with: requestPoints,
+            drivingOptions: YMKDrivingDrivingOptions(),
+            vehicleOptions: YMKDrivingVehicleOptions(),
+            routeHandler: responseHandler)
+        
+        mapView.mapWindow.map.move(
+            with: YMKCameraPosition.init(target: requestPoints.first!.point, zoom: 15, azimuth: 0, tilt: 0),
+                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
+                cameraCallback: nil)
     }
     
     public func canGo() -> Bool {
@@ -200,5 +200,29 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
             }
         }
     }
+    
+    // Code from Yandex Mapkit Demo.
+    
+    private func onRoutesReceived(_ routes: [YMKDrivingRoute]) {
+        let mapObjects = mapView.mapWindow.map.mapObjects
+        mapObjects.clear()
+        for route in routes {
+            mapObjects.addPolyline(with: route.geometry)
+        }
+    }
+    
+    func onRoutesError(_ error: Error) {
+        let routingError = (error as NSError).userInfo[YRTUnderlyingErrorKey] as! YRTError
+        var errorMessage = "Unknown error"
+        if routingError.isKind(of: YRTNetworkError.self) {
+            errorMessage = "Network error"
+        } else if routingError.isKind(of: YRTRemoteError.self) {
+            errorMessage = "Remote server error"
+        }
+            
+        let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+        present(alert, animated: true, completion: nil)
+    }
 }
-

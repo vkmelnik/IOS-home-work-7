@@ -5,7 +5,7 @@
 //  Created by Vsevolod Melnik on 20.01.2022.
 //
 
-import MapKit
+import YandexMapsMobile
 import UIKit
 
 extension MapViewController: UITextFieldDelegate {
@@ -31,15 +31,4 @@ extension MapViewController: UITextFieldDelegate {
         }
     }
     
-}
-
-extension MapViewController: MKMapViewDelegate {
-    
-    // Draw route.
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = MKPolylineRenderer(overlay: overlay as! MKPolyline)
-        renderer.strokeColor = .blue
-        renderer.lineWidth = 5
-        return renderer
-    }
 }

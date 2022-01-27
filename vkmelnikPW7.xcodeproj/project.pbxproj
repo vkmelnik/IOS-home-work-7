@@ -18,6 +18,8 @@
 		126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF52799932D00AC7E84 /* MapTextField.swift */; };
 		126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */; };
 		128DCBA527A02423004D20F9 /* MapViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */; };
+		12A2DFFA27A2CA06007ADCF0 /* API_keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 12A2DFF927A2CA06007ADCF0 /* API_keys.plist */; };
+		171F5713617C5613DED7A8E2 /* Pods_vkmelnikPW7.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF78C25609DAC759DBB828E1 /* Pods_vkmelnikPW7.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,10 @@
 		126C1AF52799932D00AC7E84 /* MapTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTextField.swift; sourceTree = "<group>"; };
 		126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewExtension.swift; sourceTree = "<group>"; };
 		128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerProtocol.swift; sourceTree = "<group>"; };
+		12A2DFF927A2CA06007ADCF0 /* API_keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = API_keys.plist; sourceTree = "<group>"; };
+		61C563046DAB82C6A3B21AF9 /* Pods-vkmelnikPW7.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vkmelnikPW7.debug.xcconfig"; path = "Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7.debug.xcconfig"; sourceTree = "<group>"; };
+		7676C41262512EED42393584 /* Pods-vkmelnikPW7.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vkmelnikPW7.release.xcconfig"; path = "Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7.release.xcconfig"; sourceTree = "<group>"; };
+		CF78C25609DAC759DBB828E1 /* Pods_vkmelnikPW7.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_vkmelnikPW7.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				171F5713617C5613DED7A8E2 /* Pods_vkmelnikPW7.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,6 +59,8 @@
 			children = (
 				126C1AD72799831100AC7E84 /* vkmelnikPW7 */,
 				126C1AD62799831100AC7E84 /* Products */,
+				429A3BE695D7780FCBCF1A33 /* Pods */,
+				C0A4A792AFC8C1125F889196 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,6 +82,7 @@
 				126C1ADA2799831200AC7E84 /* SceneDelegate.swift */,
 				126C1AE12799831400AC7E84 /* Assets.xcassets */,
 				126C1AE32799831400AC7E84 /* LaunchScreen.storyboard */,
+				12A2DFF927A2CA06007ADCF0 /* API_keys.plist */,
 				126C1AE62799831400AC7E84 /* Info.plist */,
 				126C1AEE279989F400AC7E84 /* UIView_Pin.swift */,
 			);
@@ -106,6 +116,24 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		429A3BE695D7780FCBCF1A33 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				61C563046DAB82C6A3B21AF9 /* Pods-vkmelnikPW7.debug.xcconfig */,
+				7676C41262512EED42393584 /* Pods-vkmelnikPW7.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		C0A4A792AFC8C1125F889196 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CF78C25609DAC759DBB828E1 /* Pods_vkmelnikPW7.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -113,9 +141,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 126C1AE92799831400AC7E84 /* Build configuration list for PBXNativeTarget "vkmelnikPW7" */;
 			buildPhases = (
+				CEAC95AF21951ABCFE1B55EC /* [CP] Check Pods Manifest.lock */,
 				126C1AD12799831100AC7E84 /* Sources */,
 				126C1AD22799831100AC7E84 /* Frameworks */,
 				126C1AD32799831100AC7E84 /* Resources */,
+				422CCA5A227F28F5BD3643DC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -163,12 +193,55 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12A2DFFA27A2CA06007ADCF0 /* API_keys.plist in Resources */,
 				126C1AE52799831400AC7E84 /* LaunchScreen.storyboard in Resources */,
 				126C1AE22799831400AC7E84 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		422CCA5A227F28F5BD3643DC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CEAC95AF21951ABCFE1B55EC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-vkmelnikPW7-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		126C1AD12799831100AC7E84 /* Sources */ = {
@@ -319,6 +392,7 @@
 		};
 		126C1AEA2799831400AC7E84 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 61C563046DAB82C6A3B21AF9 /* Pods-vkmelnikPW7.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -338,6 +412,7 @@
 		};
 		126C1AEB2799831400AC7E84 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7676C41262512EED42393584 /* Pods-vkmelnikPW7.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
