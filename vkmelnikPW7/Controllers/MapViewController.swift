@@ -11,8 +11,10 @@ import YandexMapsMobile
 
 class MapViewController: UIViewController, MapViewControllerProtocol {
     
-    
+    private var compass: Compass!
     private var goButton: UIButton!
+    private var plusButton: UIButton!
+    private var minusButton: UIButton!
     private var distanceLabel: UILabel!
     private var clearButton: UIButton!
     private var startLocation: UITextField!
@@ -36,7 +38,9 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingHeading()
         configureUI()
         initTraffic()
     }
@@ -53,6 +57,32 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         configureButtons()
         configureTextFields()
         configureDistanceLabel()
+        configureCompass()
+        configurePlusMinus()
+    }
+    
+    private func configureCompass() {
+        let compass = Compass()
+        view.addSubview(compass)
+        compass.pinRight(to: view, 10)
+        compass.pinBottom(to: goButton.topAnchor, 10)
+        self.compass = compass
+    }
+    
+    private func configurePlusMinus() {
+        let plus = MapActionButton(backgroundColor: UIColor(white: 0.7, alpha: 0.97), text: "+")
+        let minus = MapActionButton(backgroundColor: UIColor(white: 0.7, alpha: 0.97), text: "-")
+        view.addSubview(minus)
+        minus.pinRight(to: view, 10)
+        minus.pinBottom(to: compass.topAnchor, 10)
+        minus.addTarget(self, action: #selector(minusButtonWasPressed), for: .touchUpInside)
+        view.addSubview(plus)
+        plus.pinRight(to: view, 10)
+        plus.pinBottom(to: minus.topAnchor, 10)
+        plus.addTarget(self, action: #selector(plusButtonWasPressed), for: .touchUpInside)
+        
+        self.plusButton = plus
+        self.minusButton = minus
     }
     
     private func configureMapView() {
@@ -113,6 +143,24 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         distanceLabel.pinTop(to: endLocation.bottomAnchor, 10)
         
         self.distanceLabel = distanceLabel
+    }
+    
+    @objc func plusButtonWasPressed() {
+        let zoom = mapView.mapWindow.map.cameraPosition.zoom + 1
+        let target = mapView.mapWindow.map.cameraPosition.target
+        mapView.mapWindow.map.move(
+            with: YMKCameraPosition.init(target: target, zoom: zoom, azimuth: 0, tilt: 0),
+                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
+                cameraCallback: nil)
+    }
+    
+    @objc func minusButtonWasPressed() {
+        let zoom = mapView.mapWindow.map.cameraPosition.zoom - 1
+        let target = mapView.mapWindow.map.cameraPosition.target
+        mapView.mapWindow.map.move(
+            with: YMKCameraPosition.init(target: target, zoom: zoom, azimuth: 0, tilt: 0),
+                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
+                cameraCallback: nil)
     }
     
     @objc func clearButtonWasPressed() {
@@ -209,6 +257,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     public func disableButtons() {
         goButton.isEnabled = false
         clearButton.isEnabled = false
+    }
+    
+    public func updateCompass(heading: Double) {
+        compass.update(heading: heading)
     }
     
     private func getCoordinateFrom(address: String,
