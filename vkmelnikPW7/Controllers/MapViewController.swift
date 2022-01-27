@@ -13,6 +13,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     
     
     private var goButton: UIButton!
+    private var distanceLabel: UILabel!
     private var clearButton: UIButton!
     private var startLocation: UITextField!
     private var endLocation: UITextField!
@@ -51,6 +52,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         configureMapView()
         configureButtons()
         configureTextFields()
+        configureDistanceLabel()
     }
     
     private func configureMapView() {
@@ -59,8 +61,8 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     }
     
     private func configureButtons() {
-        let goButton = MapActionButton(backgroundColor: .blue, text: "Go")
-        let clearButton = MapActionButton(backgroundColor: .lightGray, text: "Clear")
+        let goButton = MapActionButton(backgroundColor: UIColor(red: 1.0, green: 0.8, blue: 0.1, alpha: 0.97), text: "Go")
+        let clearButton = MapActionButton(backgroundColor: UIColor(white: 0.7, alpha: 0.97), text: "Clear")
         clearButton.addTarget(self, action: #selector(clearButtonWasPressed), for: .touchUpInside)
         goButton.addTarget(self, action: #selector(goButtonWasPressed), for: .touchUpInside)
         goButton.isEnabled = false
@@ -81,8 +83,8 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     }
     
     private func configureTextFields() {
-        let startLocation = MapTextField(backgroundColor: .lightGray, placeholder: "Start location")
-        let endLocation = MapTextField(backgroundColor: .lightGray, placeholder: "End location")
+        let startLocation = MapTextField(backgroundColor: UIColor(white: 0.7, alpha: 0.97), placeholder: "Start location")
+        let endLocation = MapTextField(backgroundColor: UIColor(white: 0.7, alpha: 0.97), placeholder: "End location")
         let textStack = UIStackView()
         textStack.axis = .vertical
         view.addSubview(textStack)
@@ -98,6 +100,19 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         endLocation.delegate = self
         self.startLocation = startLocation
         self.endLocation = endLocation
+    }
+    
+    private func configureDistanceLabel() {
+        let distanceLabel = UILabel()
+        distanceLabel.text = ""
+        distanceLabel.backgroundColor = UIColor(white: 0.7, alpha: 0.97)
+        distanceLabel.layer.cornerRadius = 5
+        distanceLabel.layer.masksToBounds = true
+        view.addSubview(distanceLabel)
+        distanceLabel.pinLeft(to: view, 10)
+        distanceLabel.pinTop(to: endLocation.bottomAnchor, 10)
+        
+        self.distanceLabel = distanceLabel
     }
     
     @objc func clearButtonWasPressed() {
@@ -211,8 +226,11 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private func onRoutesReceived(_ routes: [YMKDrivingRoute]) {
         let mapObjects = mapView.mapWindow.map.mapObjects
         mapObjects.clear()
-        for route in routes {
+        if let route = routes.first {
             mapObjects.addPolyline(with: route.geometry)
+            distanceLabel.text = " "
+                + String(format: "%.0f", route.metadata.weight.distance.value)
+                + " meters "
         }
     }
     
