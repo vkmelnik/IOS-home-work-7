@@ -11,6 +11,7 @@ import YandexMapsMobile
 
 class MapViewController: UIViewController, MapViewControllerProtocol {
     
+    
     private var goButton: UIButton!
     private var clearButton: UIButton!
     private var startLocation: UITextField!
@@ -19,6 +20,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     
     var coordinates: [CLLocationCoordinate2D] = []
     var drivingSession: YMKDrivingSession?
+    var trafficLayer : YMKTrafficLayer!
     
     
     private let mapView: YMKMapView = {
@@ -35,10 +37,13 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         // Do any additional setup after loading the view.
         locationManager.requestWhenInUseAuthorization()
         configureUI()
-        mapView.mapWindow.map.move(
-                with: YMKCameraPosition.init(target: YMKPoint(latitude: 55.751574, longitude: 37.573856), zoom: 15, azimuth: 0, tilt: 0),
-                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
-                cameraCallback: nil)
+        initTraffic()
+    }
+    
+    private func initTraffic() {
+        trafficLayer = YMKMapKit.sharedInstance().createTrafficLayer(with: mapView.mapWindow)
+        trafficLayer.addTrafficListener(withTrafficListener: self)
+        trafficLayer.setTrafficVisibleWithOn(true)
     }
 
     private func configureUI() {
