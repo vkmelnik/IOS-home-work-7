@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		124BFE2427A43DAA0026E465 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124BFE2327A43DAA0026E465 /* Route.swift */; };
+		124BFE2627A443CF0026E465 /* MapViewFoodExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124BFE2527A443CF0026E465 /* MapViewFoodExtension.swift */; };
 		126C1AD92799831200AC7E84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AD82799831200AC7E84 /* AppDelegate.swift */; };
 		126C1ADB2799831200AC7E84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1ADA2799831200AC7E84 /* SceneDelegate.swift */; };
 		126C1ADD2799831200AC7E84 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1ADC2799831200AC7E84 /* MapViewController.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		124BFE2327A43DAA0026E465 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Route.swift; path = vkmelnikPW7/Controllers/Route.swift; sourceTree = SOURCE_ROOT; };
+		124BFE2527A443CF0026E465 /* MapViewFoodExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewFoodExtension.swift; sourceTree = "<group>"; };
 		126C1AD52799831100AC7E84 /* vkmelnikPW7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vkmelnikPW7.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		126C1AD82799831200AC7E84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		126C1ADA2799831200AC7E84 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */,
 				128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */,
 				12A2E00127A2F962007ADCF0 /* MapViewLocationManagerExtension.swift */,
+				124BFE2527A443CF0026E465 /* MapViewFoodExtension.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				126C1AF62799932D00AC7E84 /* MapTextField.swift in Sources */,
 				126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */,
 				12A2E00227A2F962007ADCF0 /* MapViewLocationManagerExtension.swift in Sources */,
+				124BFE2627A443CF0026E465 /* MapViewFoodExtension.swift in Sources */,
 				128DCBA527A02423004D20F9 /* MapViewControllerProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -13,6 +13,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     
     private var compass: Compass!
     private var goButton: UIButton!
+    private var eatButton: UIButton!
     private var plusButton: UIButton!
     private var minusButton: UIButton!
     private var distanceLabel: UILabel!
@@ -23,6 +24,8 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     
     var drivingSession: YMKDrivingSession?
     var trafficLayer : YMKTrafficLayer!
+    var searchManager: YMKSearchManager?
+    var searchSession: YMKSearchSession?
     
     var mainRoute = Route()
     
@@ -44,6 +47,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         locationManager.startUpdatingHeading()
         configureUI()
         initTraffic()
+        searchManager = YMKSearch.sharedInstance().createSearchManager(with: .combined)
     }
     
     private func initTraffic() {
@@ -60,6 +64,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         configureDistanceLabel()
         configureCompass()
         configurePlusMinus()
+        configureEatButton()
     }
     
     private func configureCompass() {
@@ -68,6 +73,16 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         compass.pinRight(to: view, 10)
         compass.pinBottom(to: goButton.topAnchor, 10)
         self.compass = compass
+    }
+    
+    private func configureEatButton() {
+        let button = MapActionButton(backgroundColor: UIColor(white: 0.7, alpha: 0.97), text: "Eat")
+        view.addSubview(button)
+        button.pinRight(to: view, 10)
+        button.pinBottom(to: plusButton.topAnchor, 10)
+        button.addTarget(self, action: #selector(eatButtonWasPressed), for: .touchUpInside)
+        
+        self.eatButton = button
     }
     
     private func configurePlusMinus() {
@@ -151,6 +166,24 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
 
 // Map logic.
 extension MapViewController {
+    
+    // Find food in the camera's field of view.
+    @objc func eatButtonWasPressed() {
+        let responseHandler = {(searchResponse: YMKSearchResponse?, error: Error?) -> Void in
+            if let response = searchResponse {
+                self.onSearchResponse(response, mapView: self.mapView)
+            } else {
+                self.onSearchError(error!)
+            }
+        }
+        
+        searchSession = searchManager!.submit(
+            withText: "cafe restaurant bar",
+            geometry: YMKVisibleRegionUtils.toPolygon(with: self.mapView.mapWindow.map.visibleRegion),
+            searchOptions: YMKSearchOptions(),
+            responseHandler: responseHandler)
+    }
+    
     @objc func plusButtonWasPressed() {
         let zoom = mapView.mapWindow.map.cameraPosition.zoom + 1
         let target = mapView.mapWindow.map.cameraPosition.target
@@ -240,7 +273,7 @@ extension MapViewController {
         // Move camera.
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: requestPoints.first!.point, zoom: 15, azimuth: 0, tilt: 0),
-            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 2),
             cameraCallback: nil)
     }
     
