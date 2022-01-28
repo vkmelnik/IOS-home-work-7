@@ -5,10 +5,10 @@
 //  Created by Vsevolod Melnik on 28.01.2022.
 //
 
-import CoreLocation
+import YandexMapsMobile
 
 struct Route {
-    var coordinates: [CLLocationCoordinate2D] = []
+    var coordinates: [YMKPoint] = []
 }
 
 extension Route {
@@ -16,7 +16,7 @@ extension Route {
         coordinates = []
     }
     
-    mutating func addCoords(_ coords: CLLocationCoordinate2D) {
+    mutating func addCoords(_ coords: YMKPoint) {
         coordinates.append(coords)
     }
 }

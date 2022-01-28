@@ -5,8 +5,8 @@
 //  Created by Vsevolod Melnik on 20.01.2022.
 //
 
+import Foundation
 import UIKit
-import CoreLocation
 import YandexMapsMobile
 
 class MapViewController: UIViewController, MapViewControllerProtocol {
@@ -20,7 +20,6 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private var clearButton: UIButton!
     private var startLocation: UITextField!
     private var endLocation: UITextField!
-    public let locationManager = CLLocationManager()
     
     var drivingSession: YMKDrivingSession?
     var trafficLayer : YMKTrafficLayer!
@@ -42,9 +41,6 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingHeading()
         configureUI()
         initTraffic()
         searchManager = YMKSearch.sharedInstance().createSearchManager(with: .combined)
@@ -209,15 +205,20 @@ extension MapViewController {
         clearButton.isEnabled = false
     }
     
-    func addPointInRoute(address: String, group: DispatchGroup) {
-        group.enter()
-        getCoordinateFrom(address: address, completion: {
-            [weak self] coords,_ in
-            if let coords = coords {
-                self?.mainRoute.addCoords(coords)
+    func addPointInRoute(address: String, completion: @escaping () -> Void) {
+        let responseHandler = {(searchResponse: YMKSearchResponse?, error: Error?) -> Void in
+            if let response = searchResponse {
+                self.onRoutePointSearchResponse(response, completion: completion)
+            } else {
+                self.onSearchError(error!)
             }
-            group.leave()
-        })
+        }
+        
+        searchSession = searchManager!.submit(
+            withText: address,
+            geometry: YMKVisibleRegionUtils.toPolygon(with: self.mapView.mapWindow.map.visibleRegion),
+            searchOptions: YMKSearchOptions(),
+            responseHandler: responseHandler)
     }
     
     @objc func goButtonWasPressed() {
@@ -229,21 +230,10 @@ extension MapViewController {
             return
         }
         mainRoute.clear()
-        let group = DispatchGroup()
-        addPointInRoute(address: first, group: group)
-        addPointInRoute(address: second, group: group)
-        
-        group.notify(queue: .main) {
-            DispatchQueue.main.async { [weak self] in
-                self?.buildPath()
-            }
-        }
-    }
-    
-    private func CLCoordsToYMKRequestPoint(address: CLLocationCoordinate2D) -> YMKRequestPoint {
-        return YMKRequestPoint(point: YMKPoint(latitude: address.latitude,
-                                               longitude: address.longitude),
-                               type: .waypoint, pointContext: nil)
+        addPointInRoute(address: first, completion: { [self]() in
+                            self.addPointInRoute(address: second, completion: {() in
+                                self.buildPath()
+                            })})
     }
     
     private func buildPath() {
@@ -251,8 +241,10 @@ extension MapViewController {
             return
         }
         let requestPoints : [YMKRequestPoint] = [
-            CLCoordsToYMKRequestPoint(address: mainRoute.coordinates.first!),
-            CLCoordsToYMKRequestPoint(address: mainRoute.coordinates.last!)
+            YMKRequestPoint(point: mainRoute.coordinates.first!,
+                                   type: .waypoint, pointContext: nil),
+            YMKRequestPoint(point: mainRoute.coordinates.last!,
+                                   type: .waypoint, pointContext: nil)
         ]
         
         let responseHandler = {(routesResponse: [YMKDrivingRoute]?, error: Error?) -> Void in
@@ -308,13 +300,10 @@ extension MapViewController {
         compass.update(heading: heading)
     }
     
-    private func getCoordinateFrom(address: String,
-                                   completion:
-                                    @escaping(_ coordinate: CLLocationCoordinate2D?,
-                                              _ error: Error?) -> () ) {
-        DispatchQueue.global(qos: .background).async {
-            CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1)
-            }
+    func onRoutePointSearchResponse(_ response: YMKSearchResponse, completion: @escaping () -> Void) {
+        if let point = response.collection.children.first?.obj?.geometry.first?.point {
+            mainRoute.addCoords(point)
+            completion()
         }
     }
     
