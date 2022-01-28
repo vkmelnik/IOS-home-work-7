@@ -324,7 +324,8 @@ extension MapViewController {
         let mapObjects = mapView.mapWindow.map.mapObjects
         mapObjects.clear()
         if let route = routes.first {
-            mapObjects.addPolyline(with: route.geometry)
+            let line = mapObjects.addColoredPolyline()
+            YMKRouteHelper.updatePolyline(withPolyline: line, route: route, style: YMKRouteHelper.createDefaultJamStyle())
             distanceLabel.text = " "
                 + String(format: "%.0f", route.metadata.weight.distance.value)
                 + " meters "
