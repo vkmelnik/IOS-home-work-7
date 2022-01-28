@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		124BFE2427A43DAA0026E465 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124BFE2327A43DAA0026E465 /* Route.swift */; };
 		126C1AD92799831200AC7E84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AD82799831200AC7E84 /* AppDelegate.swift */; };
 		126C1ADB2799831200AC7E84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1ADA2799831200AC7E84 /* SceneDelegate.swift */; };
 		126C1ADD2799831200AC7E84 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1ADC2799831200AC7E84 /* MapViewController.swift */; };
@@ -19,13 +20,13 @@
 		126C1AF8279995CD00AC7E84 /* MapViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */; };
 		128DCBA527A02423004D20F9 /* MapViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */; };
 		12A2DFFA27A2CA06007ADCF0 /* API_keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 12A2DFF927A2CA06007ADCF0 /* API_keys.plist */; };
-		12A2DFFC27A2CDC1007ADCF0 /* MapViewTrafficExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2DFFB27A2CDC1007ADCF0 /* MapViewTrafficExtension.swift */; };
 		12A2E00027A2F5C9007ADCF0 /* Compass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2DFFF27A2F5C9007ADCF0 /* Compass.swift */; };
 		12A2E00227A2F962007ADCF0 /* MapViewLocationManagerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A2E00127A2F962007ADCF0 /* MapViewLocationManagerExtension.swift */; };
 		171F5713617C5613DED7A8E2 /* Pods_vkmelnikPW7.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF78C25609DAC759DBB828E1 /* Pods_vkmelnikPW7.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		124BFE2327A43DAA0026E465 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Route.swift; path = vkmelnikPW7/Controllers/Route.swift; sourceTree = SOURCE_ROOT; };
 		126C1AD52799831100AC7E84 /* vkmelnikPW7.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vkmelnikPW7.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		126C1AD82799831200AC7E84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		126C1ADA2799831200AC7E84 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,7 +41,6 @@
 		126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewExtension.swift; sourceTree = "<group>"; };
 		128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewControllerProtocol.swift; sourceTree = "<group>"; };
 		12A2DFF927A2CA06007ADCF0 /* API_keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = API_keys.plist; sourceTree = "<group>"; };
-		12A2DFFB27A2CDC1007ADCF0 /* MapViewTrafficExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewTrafficExtension.swift; sourceTree = "<group>"; };
 		12A2DFFF27A2F5C9007ADCF0 /* Compass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compass.swift; sourceTree = "<group>"; };
 		12A2E00127A2F962007ADCF0 /* MapViewLocationManagerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewLocationManagerExtension.swift; sourceTree = "<group>"; };
 		61C563046DAB82C6A3B21AF9 /* Pods-vkmelnikPW7.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vkmelnikPW7.debug.xcconfig"; path = "Target Support Files/Pods-vkmelnikPW7/Pods-vkmelnikPW7.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,7 +101,6 @@
 				126C1ADC2799831200AC7E84 /* MapViewController.swift */,
 				126C1AF7279995CD00AC7E84 /* MapViewExtension.swift */,
 				128DCBA427A02423004D20F9 /* MapViewControllerProtocol.swift */,
-				12A2DFFB27A2CDC1007ADCF0 /* MapViewTrafficExtension.swift */,
 				12A2E00127A2F962007ADCF0 /* MapViewLocationManagerExtension.swift */,
 			);
 			path = Controllers;
@@ -110,6 +109,7 @@
 		126C1AED2799869B00AC7E84 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				124BFE2327A43DAA0026E465 /* Route.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -259,8 +259,8 @@
 				12A2E00027A2F5C9007ADCF0 /* Compass.swift in Sources */,
 				126C1ADD2799831200AC7E84 /* MapViewController.swift in Sources */,
 				126C1AD92799831200AC7E84 /* AppDelegate.swift in Sources */,
+				124BFE2427A43DAA0026E465 /* Route.swift in Sources */,
 				126C1AEF279989F400AC7E84 /* UIView_Pin.swift in Sources */,
-				12A2DFFC27A2CDC1007ADCF0 /* MapViewTrafficExtension.swift in Sources */,
 				126C1ADB2799831200AC7E84 /* SceneDelegate.swift in Sources */,
 				126C1AF227998D1300AC7E84 /* MapActionButton.swift in Sources */,
 				126C1AF427998EC300AC7E84 /* UIColorExtension.swift in Sources */,

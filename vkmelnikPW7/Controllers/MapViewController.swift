@@ -21,9 +21,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     private var endLocation: UITextField!
     public let locationManager = CLLocationManager()
     
-    var coordinates: [CLLocationCoordinate2D] = []
     var drivingSession: YMKDrivingSession?
     var trafficLayer : YMKTrafficLayer!
+    
+    var mainRoute = Route()
     
     
     private let mapView: YMKMapView = {
@@ -47,7 +48,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
     
     private func initTraffic() {
         trafficLayer = YMKMapKit.sharedInstance().createTrafficLayer(with: mapView.mapWindow)
-        trafficLayer.addTrafficListener(withTrafficListener: self)
+        //trafficLayer.addTrafficListener(withTrafficListener: self)
         trafficLayer.setTrafficVisibleWithOn(true)
     }
 
@@ -145,13 +146,18 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         self.distanceLabel = distanceLabel
     }
     
+    
+}
+
+// Map logic.
+extension MapViewController {
     @objc func plusButtonWasPressed() {
         let zoom = mapView.mapWindow.map.cameraPosition.zoom + 1
         let target = mapView.mapWindow.map.cameraPosition.target
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: target, zoom: zoom, azimuth: 0, tilt: 0),
-                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
-                cameraCallback: nil)
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
+            cameraCallback: nil)
     }
     
     @objc func minusButtonWasPressed() {
@@ -159,8 +165,8 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         let target = mapView.mapWindow.map.cameraPosition.target
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: target, zoom: zoom, azimuth: 0, tilt: 0),
-                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
-                cameraCallback: nil)
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 1),
+            cameraCallback: nil)
     }
     
     @objc func clearButtonWasPressed() {
@@ -168,6 +174,17 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         endLocation.text = ""
         goButton.isEnabled = false
         clearButton.isEnabled = false
+    }
+    
+    func addPointInRoute(address: String, group: DispatchGroup) {
+        group.enter()
+        getCoordinateFrom(address: address, completion: {
+            [weak self] coords,_ in
+            if let coords = coords {
+                self?.mainRoute.addCoords(coords)
+            }
+            group.leave()
+        })
     }
     
     @objc func goButtonWasPressed() {
@@ -178,24 +195,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         else {
             return
         }
-        self.coordinates = []
+        mainRoute.clear()
         let group = DispatchGroup()
-        group.enter()
-        getCoordinateFrom(address: first, completion: {
-            [weak self] coords,_ in
-                if let coords = coords {
-                    self?.coordinates.append(coords)
-                }
-            group.leave()
-        })
-        group.enter()
-        getCoordinateFrom(address: second, completion: {
-            [weak self] coords,_ in
-                if let coords = coords {
-                    self?.coordinates.append(coords)
-                }
-            group.leave()
-        })
+        addPointInRoute(address: first, group: group)
+        addPointInRoute(address: second, group: group)
         
         group.notify(queue: .main) {
             DispatchQueue.main.async { [weak self] in
@@ -204,19 +207,21 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         }
     }
     
+    private func CLCoordsToYMKRequestPoint(address: CLLocationCoordinate2D) -> YMKRequestPoint {
+        return YMKRequestPoint(point: YMKPoint(latitude: address.latitude,
+                                               longitude: address.longitude),
+                               type: .waypoint, pointContext: nil)
+    }
+    
     private func buildPath() {
-        if self.coordinates.count < 2 {
+        if self.mainRoute.coordinates.count < 2 {
             return
         }
         let requestPoints : [YMKRequestPoint] = [
-            YMKRequestPoint(point: YMKPoint(latitude: coordinates.first!.latitude,
-                                            longitude: coordinates.first!.longitude),
-                                                type: .waypoint, pointContext: nil),
-            YMKRequestPoint(point: YMKPoint(latitude: coordinates.last!.latitude,
-                                            longitude: coordinates.last!.longitude),
-                                                type: .waypoint, pointContext: nil)
+            CLCoordsToYMKRequestPoint(address: mainRoute.coordinates.first!),
+            CLCoordsToYMKRequestPoint(address: mainRoute.coordinates.last!)
         ]
-                
+        
         let responseHandler = {(routesResponse: [YMKDrivingRoute]?, error: Error?) -> Void in
             if let routes = routesResponse {
                 self.onRoutesReceived(routes)
@@ -224,7 +229,7 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
                 self.onRoutesError(error!)
             }
         }
-            
+        
         let drivingRouter = YMKDirections.sharedInstance().createDrivingRouter()
         drivingSession = drivingRouter.requestRoutes(
             with: requestPoints,
@@ -232,17 +237,24 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
             vehicleOptions: YMKDrivingVehicleOptions(),
             routeHandler: responseHandler)
         
+        // Move camera.
         mapView.mapWindow.map.move(
             with: YMKCameraPosition.init(target: requestPoints.first!.point, zoom: 15, azimuth: 0, tilt: 0),
-                animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
-                cameraCallback: nil)
+            animationType: YMKAnimation(type: YMKAnimationType.smooth, duration: 5),
+            cameraCallback: nil)
     }
     
+    /*
+     Check text fields.
+     */
     public func canGo() -> Bool {
         return startLocation.text != ""
             && endLocation.text != "";
     }
     
+    /*
+     Go, if adress in end text field is finished.
+     */
     public func tryGo(_ textField: UITextField) {
         if (canGo() && textField == endLocation) {
             goButtonWasPressed();
@@ -294,10 +306,10 @@ class MapViewController: UIViewController, MapViewControllerProtocol {
         } else if routingError.isKind(of: YRTRemoteError.self) {
             errorMessage = "Remote server error"
         }
-            
+        
         let alert = UIAlertController(title: "Error", message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
+        
         present(alert, animated: true, completion: nil)
     }
 }
